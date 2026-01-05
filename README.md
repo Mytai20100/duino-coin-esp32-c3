@@ -1,7 +1,7 @@
 # duino-coin-esp32-c3
 Version for esp32-c3 super mini amoled 044inch . 
 
-> **Minor source code modifications to support the built-in 0.44" AMOLED display (72x40) on ESP32-C3 Super Mini, showing basic mining statistics in real-time.**
+> **Minor source code modifications to support the built-in 0.44" AMOLED display (72x64) on ESP32-C3 Super Mini, showing basic mining statistics in real-time.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/Platform-ESP32--C3-blue.svg)](https://www.espressif.com/en/products/socs/esp32-c3)
