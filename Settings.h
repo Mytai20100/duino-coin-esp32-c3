@@ -122,6 +122,17 @@ extern unsigned long accepted_share_count = 0;
 extern String node_id = "";
 extern String WALLET_ID = "";
 extern unsigned int ping = 0;
+#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2)
+  #if defined(ESP8266)
+    #define BOOT_BUTTON 0  // GPIO0 for ESP8266
+  #else
+    #define BOOT_BUTTON 9  // GPIO9 for ESP32-C3 (BOOT button)
+  #endif
+  
+  extern bool display_enabled;
+  extern unsigned long last_button_press;
+  extern const unsigned long DEBOUNCE_DELAY;
+#endif
 
 #if defined(USE_INTERNAL_SENSOR)
   #include "driver/temp_sensor.h"
