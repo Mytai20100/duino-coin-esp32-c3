@@ -80,6 +80,28 @@
       #endif
     }
 
+    void display_sleep() {
+        #if defined(DISPLAY_SSD1306)
+            u8g2.setPowerSave(1); // Turn off display
+        #endif
+        
+        #if defined(DISPLAY_16X2)
+            lcd.noBacklight();
+            lcd.noDisplay();
+        #endif
+    }
+
+    void display_wake() {
+        #if defined(DISPLAY_SSD1306)
+            u8g2.setPowerSave(0); // Turn on display
+        #endif
+        
+        #if defined(DISPLAY_16X2)
+            lcd.backlight();
+            lcd.display();
+        #endif
+    }
+#endif
 
     void display_boot() {
       // Abstraction layer: compilation time, features, etc.
@@ -167,35 +189,33 @@
       //     drawStrMultiline(features_str.c_str(), 2, 46);
       //     u8g2.sendBuffer();
       // #endif
-      #if defined(DISPLAY_SSD1306)
-        u8g2.clearBuffer();
-        
-        int width = 72;
-        int height = 40;
-        int xOffset = 28;
-        int yOffset = 12;
-        
-        u8g2.drawRFrame(xOffset, yOffset, width, height, 5);
-        
-        u8g2.setFont(u8g2_font_7x13B_tr);
-        u8g2.setCursor(xOffset + 8, yOffset + 16);
-        u8g2.print("DUCO");
-        
-        u8g2.setFont(u8g2_font_5x7_tr);
-        u8g2.setCursor(xOffset + 8, yOffset + 28);
-        u8g2.print("MINER");
-        
-        u8g2.setCursor(xOffset + 8, yOffset + 38);
-        #if defined(ESP8266)
-            u8g2.print("ESP8266");
-        #elif defined(CONFIG_FREERTOS_UNICORE)
-            u8g2.print("ESP32-C3");
-        #else
-            u8g2.print("ESP32");
-        #endif
-        
-        u8g2.sendBuffer();
+     #if defined(DISPLAY_SSD1306)
+       u8g2.clearBuffer();
+
+       int width = 72;
+       int height = 64;
+       int xOffset = (128 - width) / 2;   // = 28
+       int yOffset = 0;
+
+      u8g2.setFont(u8g2_font_7x13B_tr);
+      u8g2.setCursor(xOffset + 8, 20);
+      u8g2.print("DUCO");
+  
+      u8g2.setFont(u8g2_font_5x7_tr);
+      u8g2.setCursor(xOffset + 8, 35);
+      u8g2.print("MINER");
+  
+      u8g2.setCursor(xOffset + 8, 50);
+    #if defined(ESP8266)
+      u8g2.print("ESP8266");
+    #elif defined(CONFIG_FREERTOS_UNICORE)
+    u8g2.print("ESP32-C3");
+    #else
+    u8g2.print("ESP32");
     #endif
+  
+  u8g2.sendBuffer();
+  #endif
     }
 
     void display_info(String message) {
@@ -224,32 +244,27 @@
       //     u8g2.drawStr(116, 14, String(SOFTWARE_VERSION).c_str());
       //     u8g2.sendBuffer();
       // #endif
-      #if defined(DISPLAY_SSD1306)
-        u8g2.clearBuffer();
-        
-        int width = 72;
-        int height = 40;
-        int xOffset = 28;
-        int yOffset = 12;
-        
-        u8g2.drawRFrame(xOffset, yOffset, width, height, 5);
-        
-        u8g2.setFont(u8g2_font_6x10_tr);
-        u8g2.setCursor(xOffset + 4, yOffset + 10);
-        u8g2.print("DUINO");
-        
-        u8g2.setFont(u8g2_font_5x7_tr);
-        u8g2.setCursor(xOffset + 4, yOffset + 22);
-        u8g2.print("ESP32-C3");
-        
-        u8g2.setCursor(xOffset + 4, yOffset + 36);
-        // Cắt message nếu quá dài
-        String msg = message;
-        if (msg.length() > 10) msg = msg.substring(0, 10);
-        u8g2.print(msg);
-        
-        u8g2.sendBuffer();
-    #endif
+     #if defined(DISPLAY_SSD1306)
+    u8g2.clearBuffer();
+    int width = 72;
+    int height = 64;
+    int xOffset = (128 - width) / 2; 
+    int yOffset = 8;  
+
+    u8g2.setFont(u8g2_font_6x10_tr);
+    u8g2.setCursor(xOffset + 4, 15 + yOffset);
+    u8g2.print("DUINO");
+  
+     u8g2.setFont(u8g2_font_5x7_tr);
+     u8g2.setCursor(xOffset + 4, 30 + yOffset);
+     u8g2.print("ESP32-C3");
+     u8g2.setCursor(xOffset + 4, 50 + yOffset);
+     String msg = message;
+    if (msg.length() > 10) msg = msg.substring(0, 10);
+      u8g2.print(msg);
+  
+      u8g2.sendBuffer();
+      #endif
 
       #if defined(DISPLAY_16X2)
           lcd.clear();
@@ -267,61 +282,74 @@
                                 String difficulty, String sharerate, String ping, String accept_rate) {
       // Ran after each found share
       // Abstraction layer: displaying mining results
+      if (!display_enabled) {
+      display_sleep();
+       return;
+      } else {
+        display_wake();
+     }
       Serial.println("Displaying mining results");
-      #if defined(DISPLAY_SSD1306)
-        u8g2.clearBuffer();
-        
-        // Màn hình 72x40 - layout tối giản
-        int width = 72;
-        int height = 40;
-        int xOffset = 28;
-        int yOffset = 12;
-        
-        // Vẽ khung giống code spam
-        u8g2.drawRFrame(xOffset, yOffset, width, height, 5);
-        
-        // Dòng 1: Hashrate (lớn nhất)
-        u8g2.setFont(u8g2_font_6x10_tr);
-        u8g2.setCursor(xOffset + 4, yOffset + 10);
-        u8g2.print(hashrate);
-        u8g2.print("kH");
-        
-        // Dòng 2: Shares
-        u8g2.setFont(u8g2_font_5x7_tr);
-        u8g2.setCursor(xOffset + 4, yOffset + 20);
-        u8g2.print(accepted_shares);
-        u8g2.print("/");
-        u8g2.print(total_shares);
-        
-        // Dòng 3: Node + Ping
-        u8g2.setCursor(xOffset + 4, yOffset + 30);
-        u8g2.print(node.substring(0, 6)); // Chỉ lấy 6 ký tự đầu
-        
-        u8g2.setCursor(xOffset + 40, yOffset + 30);
-        u8g2.print(ping);
-        u8g2.print("ms");
-        
-        // Dòng 4: Difficulty
-        u8g2.setCursor(xOffset + 4, yOffset + 38);
-        u8g2.print("D:");
-        u8g2.print(difficulty);
-        
-        // WiFi signal (góc phải)
-        if (WiFi.RSSI() > -60) {
-            u8g2.drawPixel(xOffset + width - 4, yOffset + 4);
-            u8g2.drawPixel(xOffset + width - 4, yOffset + 5);
-        }
-        u8g2.drawPixel(xOffset + width - 4, yOffset + 6);
-        
-        // Animation dot (góc trái)
-        static bool blink = false;
-        blink = !blink;
-        if (blink) {
-            u8g2.drawDisc(xOffset + 4, yOffset + 4, 2);
-        }
-        
-        u8g2.sendBuffer();
-    #endif
+         #if defined(DISPLAY_SSD1306)
+            u8g2.clearBuffer();
+  
+            int screenWidth = 72;
+            int screenHeight = 64;
+            int offsetX = 28;  
+            int offsetY = 17; 
+            int y = 16 + offsetY; 
+            int lineSpacing = 7; 
+  
+            //Hashrate
+            u8g2.setFont(u8g2_font_6x10_tr);
+            String hashStr = String(hashrate) + "kH";
+            int x1 = ((screenWidth - u8g2.getStrWidth(hashStr.c_str())) / 2) + offsetX;
+            u8g2.setCursor(x1, y);
+            u8g2.print(hashStr);
+            y += lineSpacing;
+  
+            //Shares
+            u8g2.setFont(u8g2_font_5x7_tr);
+            String shareStr = String(accepted_shares) + "/" + String(total_shares);
+            int x2 = ((screenWidth - u8g2.getStrWidth(shareStr.c_str())) / 2) + offsetX;
+            u8g2.setCursor(x2, y);
+            u8g2.print(shareStr);
+            y += lineSpacing;
+  
+            //Node
+            String nodeStr = node.substring(0, 8);
+            int x4 = ((screenWidth - u8g2.getStrWidth(nodeStr.c_str())) / 2) + offsetX;
+            u8g2.setCursor(x4, y);
+            u8g2.print(nodeStr);
+            y += lineSpacing;
+  
+            //Ping
+           String pingStr = String(ping) + "ms";
+           int x6 = ((screenWidth - u8g2.getStrWidth(pingStr.c_str())) / 2) + offsetX;
+           u8g2.setCursor(x6, y);
+           u8g2.print(pingStr);
+           y += lineSpacing;
+  
+           //Difficulty
+           String diffStr = "D:" + String(difficulty);
+           int x8 = ((screenWidth - u8g2.getStrWidth(diffStr.c_str())) / 2) + offsetX;
+           u8g2.setCursor(x8, y);
+           u8g2.print(diffStr);
+  
+           // WiFi
+           if (WiFi.RSSI() > -60) {
+            u8g2.drawPixel(68, 2);
+            u8g2.drawPixel(68, 3);
+     }
+            u8g2.drawPixel(68, 4);
+  
+       static bool blink = false;
+       blink = !blink;
+       if (blink) {
+       u8g2.drawDisc(4, 3, 2);
+       }
+  
+       u8g2.sendBuffer();
+      #endif
       // #if defined(DISPLAY_SSD1306)
       //     u8g2.clearBuffer();
       //     u8g2.setFont(u8g2_font_profont10_tr);
@@ -401,4 +429,3 @@
     }
 #endif
 
-#endif
