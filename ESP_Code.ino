@@ -18,7 +18,8 @@
 
 /* If optimizations cause problems, change them to -O0 (the default) */
 #pragma GCC optimize("-Ofast")
-
+#pragma GCC optimize("-funroll-loops") 
+#pragma GCC optimize("-fprefetch-loop-arrays")
 /* If during compilation the line below causes a
   "fatal error: arduinoJson.h: No such file or directory"
   message to occur; it means that you do NOT have the
@@ -184,6 +185,19 @@ void RestartESP(String msg) {
     }
 #endif
 
+#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2)
+  bool display_enabled = true;
+  unsigned long last_button_press = 0;
+  const unsigned long DEBOUNCE_DELAY = 300; // 300ms debounce
+
+  void IRAM_ATTR handleButtonPress() {
+    unsigned long current_time = millis();
+    if (current_time - last_button_press > DEBOUNCE_DELAY) {
+      display_enabled = !display_enabled;
+      last_button_press = current_time;
+    }
+  }
+#endif
 namespace {
     MiningConfig *configuration = new MiningConfig(
         DUCO_USER,
@@ -579,9 +593,13 @@ void setup() {
     #endif
 
     #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2)
-        screen_setup();
-        display_boot();
-        delay(2500);
+    screen_setup();
+    display_boot();
+    delay(2500);
+    
+    // Setup button interrupt for display on/off
+    pinMode(BOOT_BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(BOOT_BUTTON), handleButtonPress, FALLING);
     #endif
 
     assert(CORE == 1 || CORE == 2);
