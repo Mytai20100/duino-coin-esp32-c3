@@ -17,7 +17,7 @@ Version for esp32-c3 super mini amoled 044inch .
 <td width="50%">
 
 ### Display
-
+**1/4/2026**
 The screen shows:
 - **Accepted/Total shares**
 - **Node name** and **ping**
@@ -35,7 +35,7 @@ My camera is bad ;ccc
 <td width="50%">
 
 ### ???
-
+**1/4/2026**
 ????
 
 
@@ -45,7 +45,69 @@ My camera is bad ;ccc
 </table>
 
 ---
+### Update **1/5/2026**
+<table>
+<tr>
+<td width="50%">
+<img src="https://github.com/Mytai20100/duino-coin-esp32-c3/blob/main/img/esp32-c3-mining-1-5-2026-github5.png" alt="nọting" width="100%">
+</td>
+<td width="50%">
 
+### Boot screen
+**1/5/2026**
+
+
+
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+<img src="https://github.com/Mytai20100/duino-coin-esp32-c3/blob/main/img/esp32-c3-mining-1-5-2026-github4.png" alt="Detect node" width="100%">
+</td>
+<td width="50%">
+
+### Detect node
+**1/5/2026**
+nothing
+
+
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+<img src="https://github.com/Mytai20100/duino-coin-esp32-c3/blob/main/img/esp32-c3-mining-1-5-2026-github6.png" alt="Detect node" width="100%">
+</td>
+<td width="50%">
+
+### Connect node
+**1/5/2026**
+nothing
+
+
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+<img src="https://github.com/Mytai20100/duino-coin-esp32-c3/blob/main/img/esp32-c3-mining-1-5-2026-github3.png" alt="Detect node" width="100%">
+</td>
+<td width="50%">
+
+### Stats mining
+**1/5/2026**
+nothing
+
+
+
+</td>
+</tr>
+</table>
+
+---
 ## Features
 - **Display Support**: Real-time mining stats on built-in 0.44" AMOLED display
 ## Performance
@@ -147,6 +209,7 @@ MIT License - Based on [Duino-Coin](https://github.com/duino-coin/duino-coin?tab
 #Change logs
 - *1/4/2026* fork from https://github.com/duino-coin/duino-coin and update somethings -_-
 - *1/5/2026* Update Ui remove somthing add #pragma GCC optimize("-funroll-loops"), #pragma GCC optimize("-fprefetch-loop-arrays") in ESP_CODE.ino.
+------
 **Made for the Duino-Coin community**
 
 *Happy Mining! :3*
