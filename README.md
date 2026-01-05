@@ -131,7 +131,7 @@ This fork includes:
 - Updated `Settings.h` with correct I2C pins (GPIO5/6)
 - Optimized display layout for small screen
 - Pre-configured for ESP32-C3 Super Mini
-
+ 
 ## Credit
 
 - **Original Duino-Coin**: [github.com/duino-coin/duino-coin](https://github.com/duino-coin/duino-coin)
@@ -144,7 +144,9 @@ This fork includes:
 MIT License - Based on [Duino-Coin](https://github.com/duino-coin/duino-coin?tab=MIT-1-ov-file) project
 
 **The Duino-Coin Team & Community © 2019-2026**
-
+#Change logs
+- *1/4/2026* fork from https://github.com/duino-coin/duino-coin and update somethings -_-
+- *1/5/2026* Update Ui remove somthing add #pragma GCC optimize("-funroll-loops"), #pragma GCC optimize("-fprefetch-loop-arrays") in ESP_CODE.ino.
 **Made for the Duino-Coin community**
 
 *Happy Mining! :3*
